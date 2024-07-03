@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["node_modules/**", "dist/**"], // Add your ignore patterns here
+    ignores: ["node_modules/**", "dist/**", ".env"], // Add your ignore patterns here
   },
   {
     // Specify file extensions to lint

@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import app from "./app";
 import config from "./app/config";
 import dbConnected from "./app/dbConnect";
@@ -6,7 +7,7 @@ const port = config.port;
 // database connect
 dbConnected();
 
-app.get("/", (req: Request, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("server running");
 });
 
