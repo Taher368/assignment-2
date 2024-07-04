@@ -36,7 +36,7 @@ const createOrderToDB = async (order: IOrder) => {
     email,
     price: updatePrice,
   };
-
+  console.log(newOrder);
   // Save the order document
   await Order.create(newOrder);
 
