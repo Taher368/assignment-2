@@ -1,16 +1,24 @@
 import { Request, Response } from "express";
 import { ProductService } from "./product.services";
+import IProductZodSchema from "./product.validation";
+import { z } from "zod";
 
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
-    const result = await ProductService.createProductToDB(productData);
+
+    const validateData = IProductZodSchema.parse(productData);
+
+    const result = await ProductService.createProductToDB(validateData);
     res.status(200).json({
       success: true,
       message: "Product created successfully!",
       data: result,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      res.json({ success: false, message: error.errors });
+    }
     res.status(500).json({ success: false, message: "product created failed" });
   }
 };
@@ -18,9 +26,10 @@ const updateData = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
     const productData = req.body;
+    const validateData = IProductZodSchema.parse(productData);
     const result = await ProductService.updateProdcutoODB(
       productId,
-      productData,
+      validateData
     );
     res.status(200).json({
       success: true,
@@ -37,7 +46,7 @@ const getAllProduct = async (req: Request, res: Response) => {
     const searchTerm = req.query.searchTerm;
 
     const result = await ProductService.getAllProductFromDB(
-      searchTerm as string | null,
+      searchTerm as string | null
     );
     if (result.length > 0) {
       res.status(200).json({

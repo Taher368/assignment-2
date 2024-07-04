@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.services";
+import OrderValidationSchema from "./order.validation";
+import { z } from "zod";
 const createOrder = async (req: Request, res: Response) => {
-  const product = req.body;
-
   try {
-    const result = await OrderServices.createOrderToDB(product);
+    const product = req.body;
+    const validateData = OrderValidationSchema.parse(product);
+    const result = await OrderServices.createOrderToDB(validateData);
 
     res.json({
       success: true,
@@ -12,8 +14,10 @@ const createOrder = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.error("Error creating order:", error);
-    return res.json({ success: false, message: `{$error}` });
+    if (error instanceof z.ZodError) {
+      res.json({ success: false, error: error.errors });
+    }
+    res.json({ success: false, message: "Order created failed" });
   }
 };
 const getAllOrders = async (req: Request, res: Response) => {
@@ -27,16 +31,17 @@ const getAllOrders = async (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       success: false,
-      message: `${error.message}`,
+      message: `No order found`,
     });
   }
 };
 const getSingleUserOrders = async (req: Request, res: Response) => {
   const { email } = req.query;
-  console.log(email);
 
   try {
-    const result = await OrderServices.getSingleUserOrdersFromDB(email);
+    const result = await OrderServices.getSingleUserOrdersFromDB(
+      email as string
+    );
     res.json({
       success: true,
       messages: "Orders fetched successfully for user email!",
@@ -45,7 +50,7 @@ const getSingleUserOrders = async (req: Request, res: Response) => {
   } catch (error) {
     res.json({
       success: false,
-      mesage: error,
+      mesage: "No order found",
     });
   }
 };

@@ -4,7 +4,6 @@ import { Product } from "./product.model";
 // create product data into database
 const createProductToDB = async (product: IProduct) => {
   const data = await Product.create(product);
-  console.log(data);
 
   return data;
 };
