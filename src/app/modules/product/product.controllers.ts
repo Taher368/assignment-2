@@ -57,13 +57,13 @@ const getSingleProductFromDB = async (req: Request, res: Response) => {
     const { productId } = req.params;
     const result = await ProductService.getSingleProductFromDB(productId);
 
-    res.status(200).json({
+    res.json({
       success: true,
       message: "Product fetched successfully!",
       data: result,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "something wen't wrong" });
+    res.json({ success: false, message: "Product no found" });
   }
 };
 const deleteProduct = async (req: Request, res: Response) => {
@@ -77,7 +77,7 @@ const deleteProduct = async (req: Request, res: Response) => {
       data: null,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: "something wen't wrong" });
+    res.json({ success: false, message: "something wen't wrong" });
   }
 };
 

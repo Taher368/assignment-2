@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 import { IProduct, IVariants } from "./product.interface";
 
 const variantSchema = new Schema<IVariants>({
@@ -11,10 +11,7 @@ const productSchema = new Schema<IProduct>({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   category: { type: String, required: true },
-  tags: {
-    type: [String],
-    required: true,
-  },
+  tags: { type: [String], required: true },
   variants: [variantSchema],
   inventory: {
     quantity: { type: Number, required: true },

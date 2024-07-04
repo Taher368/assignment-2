@@ -1,9 +1,11 @@
+import { Document } from "mongoose";
+
 export type IVariants = {
   type: string;
   value: string;
 };
 
-export type IProduct = {
+export interface IProduct extends Document {
   name: string;
   description: string;
   price: number;
@@ -14,4 +16,4 @@ export type IProduct = {
     quantity: number;
     inStock: boolean;
   };
-};
+}
