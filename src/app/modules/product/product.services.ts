@@ -14,7 +14,7 @@ const updateProdcutoODB = async (productId: string, productData: IProduct) => {
   const updateData = await Product.findOneAndUpdate(
     { _id: productId },
     { $set: productData },
-    { new: true },
+    { new: true }
   ).lean();
 
   if (!updateData) {

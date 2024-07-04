@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.services";
-export const createOrder = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response) => {
   const product = req.body;
 
   try {
     const result = await OrderServices.createOrderToDB(product);
-    console.log("orderservice result", result);
 
     res.json({
       success: true,
@@ -17,7 +16,42 @@ export const createOrder = async (req: Request, res: Response) => {
     return res.json({ success: false, message: `{$error}` });
   }
 };
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    const result = await OrderServices.getAllOrdersFromDB();
+    res.json({
+      success: true,
+      message: "Orders fetched successfully!",
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: `${error.message}`,
+    });
+  }
+};
+const getSingleUserOrders = async (req: Request, res: Response) => {
+  const { email } = req.query;
+  console.log(email);
+
+  try {
+    const result = await OrderServices.getSingleUserOrdersFromDB(email);
+    res.json({
+      success: true,
+      messages: "Orders fetched successfully for user email!",
+      data: result,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      mesage: error,
+    });
+  }
+};
 
 export const orderController = {
   createOrder,
+  getAllOrders,
+  getSingleUserOrders,
 };

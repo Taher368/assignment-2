@@ -26,12 +26,15 @@ const createOrderToDB = async (order: IOrder) => {
   //  Save updated product into the database
   await product.save();
 
+  //calculate order price
+  const updatePrice = quantity * price;
+
   // update product price
   const newOrder = {
     productId,
     quantity,
     email,
-    price,
+    price: updatePrice,
   };
 
   // Save the order document
@@ -40,6 +43,25 @@ const createOrderToDB = async (order: IOrder) => {
   return newOrder;
 };
 
+const getAllOrdersFromDB = async () => {
+  const result = await Order.find();
+
+  if ((await result).length === 0) {
+    throw new Error("No order found!");
+  }
+  return result;
+};
+
+const getSingleUserOrdersFromDB = async (email: string) => {
+  const result = await Order.find({ email: email });
+  if ((await result.length) === 0) {
+    throw new Error("No order Found !");
+  }
+  return result;
+};
+
 export const OrderServices = {
   createOrderToDB,
+  getAllOrdersFromDB,
+  getSingleUserOrdersFromDB,
 };
