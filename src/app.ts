@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import cors from "cors";
-import { ProductRoutes } from "./app/module/product/products.routes";
+import { ProductRoutes } from "./app/modules/product/products.routes";
 const app: Application = express();
 
 // middle ware

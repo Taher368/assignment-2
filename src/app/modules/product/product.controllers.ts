@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { ProductService } from "./product.services";
 
-
 const createProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
@@ -35,15 +34,22 @@ const updateData = async (req: Request, res: Response) => {
 
 const getAllProduct = async (req: Request, res: Response) => {
   try {
-    const result = await ProductService.getAllProductFromDB();
+    const searchTerm = req.query.searchTerm;
 
-    res.status(200).json({
-      success: true,
-      message: "Products fetched successfully!",
-      data: result,
-    });
+    const result = await ProductService.getAllProductFromDB(
+      searchTerm as string | null,
+    );
+    if (result.length > 0) {
+      res.status(200).json({
+        success: true,
+        message: "Products fetched successfully!",
+        data: result,
+      });
+    } else {
+      res.json({ success: false, message: "No product found" });
+    }
   } catch (error) {
-    res.status(500).json({ success: false, message: "something wen't wrong" });
+    res.json({ success: false, message: "something wen't wrong" });
   }
 };
 const getSingleProductFromDB = async (req: Request, res: Response) => {
