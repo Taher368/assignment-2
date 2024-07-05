@@ -22,35 +22,21 @@ const createOrder = async (req: Request, res: Response) => {
 };
 const getAllOrders = async (req: Request, res: Response) => {
   try {
-    const result = await OrderServices.getAllOrdersFromDB();
+    const { email } = req.query;
+
+    const result = await OrderServices.getAllOrdersFromDB(
+      email as string | null
+    );
     res.json({
       success: true,
       message: "Orders fetched successfully!",
       data: result,
     });
   } catch (error) {
+    console.log(error);
     res.json({
       success: false,
       message: `No order found`,
-    });
-  }
-};
-const getSingleUserOrders = async (req: Request, res: Response) => {
-  const { email } = req.query;
-
-  try {
-    const result = await OrderServices.getSingleUserOrdersFromDB(
-      email as string
-    );
-    res.json({
-      success: true,
-      messages: "Orders fetched successfully for user email!",
-      data: result,
-    });
-  } catch (error) {
-    res.json({
-      success: false,
-      mesage: "No order found",
     });
   }
 };
@@ -58,5 +44,4 @@ const getSingleUserOrders = async (req: Request, res: Response) => {
 export const orderController = {
   createOrder,
   getAllOrders,
-  getSingleUserOrders,
 };

@@ -19,6 +19,7 @@ process.on("unhandledRejection", (error) => {
   } else {
     process.exit(1);
   }
+  console.log(error);
 });
 
 dbConnected();
